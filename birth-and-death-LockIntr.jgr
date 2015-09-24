@@ -1,0 +1,32 @@
+
+newgraph
+xaxis min 0.000000 max 1424.000000 size 3.00 label fontsize 11 : 
+no_auto_hash_labels no_auto_hash_marks
+hash_labels fontsize 6 vjc hjl
+draw_hash_labels
+hash_at  163
+hash_label at  163 : 2012
+hash_at  529
+hash_label at  529 : 2013
+hash_at  894
+hash_label at  894 : 2014
+hash_at  1259
+hash_label at  1259 : 2015
+
+
+yaxis min 0.0000 max 20.0000 size 1.00 label fontsize 9 : # of faults
+mhash 0 hash_labels fontsize 7
+
+ legend defaults x 50 y 25 fontsize 7i
+
+shell : cpp -P -undef -DYMAX=25 -DYMIN=0 base3.annot  
+
+newcurve linetype solid color 0. 1. 0. marktype x label : Elimination
+pts
+
+include birth-and-death/death-LockIntr.data
+
+newcurve linetype solid color 1. 0. 0. marktype triangle mrotate -90 label : Introduction
+pts
+
+include birth-and-death/birth-LockIntr.data
