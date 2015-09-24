@@ -1,0 +1,47 @@
+
+############################
+############################
+
+EPS=$(IMAGES_JGR:%.jgr=%.eps) $(IMAGES_FIG:%.fig=%.eps)
+
+PDF=$(EPS:%.eps=%.pdf)
+PNG=$(EPS:%.eps=%.png)
+SVG=$(PDF:%.pdf=%.svg)
+GEN=$(EPS) $(PNG) $(PDF) $(SVG)
+
+.PHONY:: m-pdf m-svg m-eps m-png m-all
+.SUFFIXES: .jgr .pdf .eps .png .svg .fig
+
+m-all: m-pdf m-eps
+
+m-eps: $(EPS)
+m-pdf: $(PDF)
+m-png: $(PNG)
+m-svg: $(SVG)
+
+.fig.eps:
+	fig2dev -L eps $< $@
+
+.fig.pdf:
+	fig2dev -L pdf $< $@
+
+#.jgr.pdf:
+#	jgraph $< | ps2eps -q -l -r 600 -g -C | epstopdf --filter > $@
+
+.jgr.eps:
+	jgraph $< | ps2eps -q -l -r 600 -g -C > $@
+
+.eps.pdf:
+	cat $<  | epstopdf --filter > $@
+
+.eps.png:
+	convert -density 600 $< $@
+
+#.pdf.png:
+#	convert -density 600 $< $@
+
+.pdf.svg:
+	inkscape $< -l $@ 2> /dev/null
+
+clean::
+	rm -f $(GEN)
